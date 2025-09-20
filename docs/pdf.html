@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>M Share • Profile PDF</title>
+    <style>
+        body{margin:0;background:#0f172a;color:#e5e7eb;font-family:system-ui,sans-serif}
+        .wrap{max-width:920px;margin:auto;padding:24px}
+        .card{background:#111827;border-radius:20px;padding:24px}
+        a{color:#38bdf8}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>Download Profile PDF</h1>
+        <p>Your profile PDF includes all active links.</p>
+        <p><a id="pdfLink" download="m_share_profile.pdf">⬇ Download PDF</a></p>
+        <p><a id="back">← Back to Profile</a></p>
+    </div>
+</div>
+<script>
+    const qp = location.search || '';
+    // Build a dynamic PDF (placeholder, can be replaced with real hosted file)
+    const pdfUrl = 'https://example.com/m_share_profile.pdf';
+    document.getElementById('pdfLink').href = pdfUrl;
+    document.getElementById('back').href = 'index.html'+qp;
+</script>
+</body>
+</html>

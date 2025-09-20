@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>M Share • Wellbeing</title>
+    <style>
+        body{margin:0;background:#0f172a;color:#e5e7eb;font-family:system-ui,sans-serif}
+        .wrap{max-width:920px;margin:auto;padding:24px}
+        .card{background:#111827;border-radius:20px;padding:24px}
+        h1{margin:0 0 12px;font-size:1.6rem}
+        .tip{border-left:4px solid #f472b6;padding:10px 12px;background:#0a1020;border-radius:10px;margin:10px 0}
+        .btn{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:10px;background:#0a1020;text-decoration:none;color:#e5e7eb}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>Wellbeing</h1>
+        <div class="tip">✨ Take 5 minutes daily to focus on your breathing.</div>
+        <div class="tip">🚶 A short walk after meals helps digestion.</div>
+        <div class="tip">💤 Aim for 7–8 hours of sleep.</div>
+        <a class="btn" id="back">← Back</a>
+    </div>
+</div>
+<script>
+    document.getElementById('back').href = 'index.html'+(location.search||'');
+</script>
+</body>
+</html>
