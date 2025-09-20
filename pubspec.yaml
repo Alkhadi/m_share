@@ -1,0 +1,84 @@
+# Pubspec for the M Share Flutter project
+#
+# This file declares the package name, description, version constraints,
+# dependencies, development dependencies, and assets. Comments are added
+# throughout to explain the purpose of each section and group of entries.
+
+name: m_share
+description: Digital business card with share and bank shortcuts
+publish_to: "none"  # Prevents publishing to pub.dev since this is a private app
+
+# Specify the minimum supported Dart SDK for this project.
+environment:
+  sdk: ^3.9.2
+
+# Application dependencies
+# These packages provide core functionality and UI components used throughout
+# the app. Dependencies are grouped by their role with inline comments.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Core & UI: launching URLs, preferences, file paths, and internationalization
+  url_launcher: ^6.3.0
+  shared_preferences: ^2.5.3
+  path_provider: ^2.1.4
+  intl: ^0.19.0
+  cupertino_icons: ^1.0.8
+
+  # Sharing, QR generation and PDF creation
+  share_plus: ^10.0.2
+  qr_flutter: ^4.1.0
+  pdf: ^3.11.0
+  printing: ^5.13.4
+
+  # Media pickers and colour picker
+  image_picker: ^1.1.2
+  flutter_colorpicker: ^1.1.0
+
+  # Contacts and permission management
+  flutter_contacts: ^1.1.9+2
+  permission_handler: ^11.3.0
+
+# Development-only dependencies
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+# Flutter-specific settings
+flutter:
+  # Use the Material Design icons and themes bundled with Flutter.
+  uses-material-design: true
+
+  # List of asset files to be included in the application bundle.
+  # These assets include avatars, backgrounds, legacy backgrounds, and
+  # the icons used for PDF generation. Each entry points to a file
+  # within the `assets` directory of the project.
+  assets:
+    # Avatar images used on profile cards
+    - assets/images/avatars/alkhadi.png
+    - assets/images/avatars/mariatou.png
+    - assets/images/avatars/avatar_business.png
+
+    # Background images used in the profile card
+    - assets/images/backgrounds/amz.jpg
+    - assets/images/backgrounds/abstract_wave.jpg
+    - assets/images/backgrounds/gradient_sky.jpg
+    - assets/images/backgrounds/gradient_sand.jpg
+    - assets/images/backgrounds/pattern_dots.jpg
+    - assets/images/backgrounds/texture_paper.jpg
+    - assets/images/backgrounds/city_soft.jpg
+
+    # Legacy background names used by older widgets (do not remove)
+    - assets/backgrounds/bg1.jpg
+    - assets/backgrounds/bg2.jpg
+    - assets/backgrounds/bg3.jpg
+
+    # Icons used in the generated PDF (see pdf_service.dart for usage)
+    - assets/icons/pdf/phone.png
+    - assets/icons/pdf/email.png
+    - assets/icons/pdf/website.png
+    - assets/icons/pdf/address.png
+    - assets/icons/pdf/wellbeing.png
+    - assets/icons/pdf/bank.png

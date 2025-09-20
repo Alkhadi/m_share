@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../models/profile.dart';
+
+/// Buttons for common UK banks. Attempts app deep link, then falls back to web.
+class BankButtons extends StatelessWidget {
+  const BankButtons({super.key, required this.profile});
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    final banks = [
+      'Monzo',
+      'Starling',
+      'Barclays',
+      'NatWest',
+      'Revolut',
+      'Santander',
+      'HSBC',
+      'Lloyds',
+      'Halifax',
+      'Nationwide',
+    ];
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: banks
+          .map((bank) => OutlinedButton(
+              onPressed: () => _openBank(context, bank), child: Text(bank)))
+          .toList(),
+    );
+  }
+
+  Future<void> _openBank(BuildContext context, String bank) async {
+    Uri? uri;
+    final sort = profile.bankSortCode.replaceAll('-', '');
+    final account = profile.bankAccountNumber;
+    final name = Uri.encodeComponent(profile.fullName);
+
+    switch (bank) {
+      case 'Monzo':
+        uri = Uri.parse(
+            'monzo://pay?sortCode=$sort&accountNumber=$account&name=$name');
+        break;
+      case 'Starling':
+        uri = Uri.parse(
+            'starling://pay?sortCode=$sort&accountNumber=$account&reference=$name');
+        break;
+      case 'Barclays':
+        uri = Uri.parse(
+            'barclays://payments?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'NatWest':
+        uri = Uri.parse(
+            'natwest://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'Revolut':
+        uri = Uri.parse(
+            'revolut://transfer?recipient=$name&sortcode=$sort&accountnumber=$account');
+        break;
+      case 'Santander':
+        uri = Uri.parse(
+            'santander://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'HSBC':
+        uri = Uri.parse(
+            'hsbc://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'Lloyds':
+        uri = Uri.parse(
+            'lloyds://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'Halifax':
+        uri = Uri.parse(
+            'halifax://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+      case 'Nationwide':
+        uri = Uri.parse(
+            'nationwide://pay?sortcode=$sort&accountnumber=$account&name=$name');
+        break;
+    }
+
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    final fallback = Uri.parse(
+      'https://www.${bank.toLowerCase()}.co.uk/send-money?sortcode=$sort&account=$account&name=$name',
+    );
+    if (await canLaunchUrl(fallback)) {
+      await launchUrl(fallback, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    if (Navigator.of(context).context.mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Could not open $bank')));
+    }
+  }
+}
