@@ -1,0 +1,9 @@
+{
+  "name": "M Share",
+  "short_name": "M Share",
+  "start_url": "/m_share/index.html",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "icons": []
+}
