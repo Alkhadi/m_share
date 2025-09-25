@@ -4,25 +4,18 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-/// Service for generating QR codes with optional avatar overlay.
-/// Used by PdfService and ShareService.
+/// Service for generating & scanning QR codes.
 class QrService {
-  /// Generate a high-resolution QR code image as PNG bytes.
-  ///
-  /// [data] → the string encoded in the QR.
-  /// [avatarPath] → optional asset or file path for a center avatar.
-  /// [size] → square output dimension in pixels (default 1024).
-  ///
-  /// The output PNG always has a solid white background
-  /// to avoid transparency issues in PDF/printing.
+  /// Generate a high-resolution QR PNG with optional avatar overlay.
   static Future<Uint8List> generateQrWithAvatar(
     String data, {
     String? avatarPath,
     int size = 1024,
   }) async {
-    // Render QR code using qr_flutter styles
     final painter = QrPainter(
       data: data,
       version: QrVersions.auto,
@@ -38,39 +31,30 @@ class QrService {
       ),
     );
 
-    // Convert to image (needs a double for size)
     final ui.Image qrImage = await painter.toImage(size.toDouble());
 
-    // Create canvas with a white background
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder);
     final double dSize = size.toDouble();
 
-    // Fill background white
     canvas.drawRect(
-      ui.Rect.fromLTWH(0.0, 0.0, dSize, dSize),
+      ui.Rect.fromLTWH(0, 0, dSize, dSize),
       ui.Paint()..color = Colors.white,
     );
-
-    // Draw QR onto canvas
     canvas.drawImage(qrImage, ui.Offset.zero, ui.Paint());
 
-    // If no avatar, export immediately
     if (avatarPath == null || avatarPath.isEmpty) {
       return _exportCanvasToPng(recorder, size);
     }
 
-    // Load avatar bytes from asset or file
     final Uint8List avatarBytes = avatarPath.startsWith('assets/')
         ? (await rootBundle.load(avatarPath)).buffer.asUint8List()
         : await File(avatarPath).readAsBytes();
 
-    // Decode avatar image
     final ui.Codec avatarCodec = await ui.instantiateImageCodec(avatarBytes);
     final ui.FrameInfo frame = await avatarCodec.getNextFrame();
     final ui.Image avatarImg = frame.image;
 
-    // Calculate overlay rect (24% of QR size)
     final double overlaySize = dSize * 0.24;
     final ui.Rect dstRect = ui.Rect.fromLTWH(
       (dSize - overlaySize) / 2,
@@ -79,7 +63,6 @@ class QrService {
       overlaySize,
     );
 
-    // Draw white halo around avatar
     final double radius = overlaySize / 2.0;
     final ui.Offset center = ui.Offset(
       dstRect.left + radius,
@@ -87,25 +70,21 @@ class QrService {
     );
     canvas.drawCircle(center, radius + 6.0, ui.Paint()..color = Colors.white);
 
-    // Clip to circle and draw avatar inside
     final ui.Path clip = ui.Path()..addOval(dstRect);
     canvas.save();
     canvas.clipPath(clip);
-
     final ui.Rect srcRect = ui.Rect.fromLTWH(
-      0.0,
-      0.0,
+      0,
+      0,
       avatarImg.width.toDouble(),
       avatarImg.height.toDouble(),
     );
     canvas.drawImageRect(avatarImg, srcRect, dstRect, ui.Paint());
     canvas.restore();
 
-    // Export final PNG bytes
     return _exportCanvasToPng(recorder, size);
   }
 
-  /// Helper to export canvas to PNG bytes.
   static Future<Uint8List> _exportCanvasToPng(
     ui.PictureRecorder recorder,
     int size,
@@ -116,5 +95,67 @@ class QrService {
       format: ui.ImageByteFormat.png,
     );
     return byteData!.buffer.asUint8List();
+  }
+}
+
+/// A simple full-screen QR scanner that returns the scanned text via [onDetected].
+/// If [autoOpenUrl] is true and the payload looks like a URL, it will be launched.
+class QrScanScreen extends StatefulWidget {
+  const QrScanScreen({super.key, this.onDetected, this.autoOpenUrl = true});
+  final ValueChanged<String>? onDetected;
+  final bool autoOpenUrl;
+
+  @override
+  State<QrScanScreen> createState() => _QrScanScreenState();
+}
+
+class _QrScanScreenState extends State<QrScanScreen> {
+  final MobileScannerController _controller = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    facing: CameraFacing.back,
+  );
+  bool _handled = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool _looksLikeUrl(String s) {
+    final t = s.trim();
+    return t.startsWith('http://') || t.startsWith('https://');
+  }
+
+  Future<void> _maybeOpen(String value) async {
+    if (!widget.autoOpenUrl) return;
+    if (_looksLikeUrl(value)) {
+      final uri = Uri.tryParse(value);
+      if (uri != null) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Scan QR')),
+      body: MobileScanner(
+        controller: _controller,
+        onDetect: (capture) async {
+          if (_handled) return;
+          final List<Barcode> barcodes = capture.barcodes;
+          if (barcodes.isEmpty) return;
+          final String? raw = barcodes.first.rawValue;
+          if (raw == null || raw.isEmpty) return;
+
+          _handled = true;
+          widget.onDetected?.call(raw);
+          await _maybeOpen(raw);
+          if (mounted) Navigator.of(context).pop(raw);
+        },
+      ),
+    );
   }
 }

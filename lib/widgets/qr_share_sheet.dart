@@ -6,7 +6,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../models/profile.dart';
 import '../services/pdf_service.dart';
-import '../services/profile_lens.dart';
 import '../services/share_service.dart';
 
 /// A sheet for sharing a profile via PDF+QR, QR image, text or email.
@@ -17,7 +16,7 @@ class QrShareSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tileDecoration = BoxDecoration(
-      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.92),
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.92),
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
     );
@@ -37,15 +36,11 @@ class QrShareSheet extends StatelessWidget {
                   label: 'Share PDF + QR',
                   decoration: tileDecoration,
                   onTap: () async {
-                    final pdf =
-                        await PdfService.buildProfilePdf(profile: profile);
-                    final url =
-                        ProfileLens.website(profile) ?? 'https://example.com';
-                    final png = await _qrPngBytes(url);
-                    await ShareService.sharePdfAndImage(
-                      pdfBytes: await pdf.readAsBytes(),
-                      pngBytes: png,
+                    final pdf = await PdfService.buildProfilePdf(
+                      profile: profile,
                     );
+                    final bytes = await pdf.readAsBytes();
+                    await ShareService.sharePdfAndImage(pdfBytes: bytes);
                   },
                 ),
                 const SizedBox(width: 16),
@@ -54,12 +49,16 @@ class QrShareSheet extends StatelessWidget {
                   label: 'Share QR Image',
                   decoration: tileDecoration,
                   onTap: () async {
-                    final url =
-                        ProfileLens.website(profile) ?? 'https://example.com';
+                    // fallback to default if no website
+                    final url = profile.website.isNotEmpty
+                        ? profile.website
+                        : 'https://example.com';
                     final png = await _qrPngBytes(url);
                     if (png != null) {
-                      await ShareService.shareImage(png,
-                          suggestedName: 'cardlink-qr.png');
+                      await ShareService.shareImage(
+                        png,
+                        suggestedName: 'mshare-qr.png',
+                      );
                     }
                   },
                 ),
@@ -73,25 +72,28 @@ class QrShareSheet extends StatelessWidget {
                   label: 'Share My Profile as Text',
                   decoration: tileDecoration,
                   onTap: () async {
-                    await ShareService.shareText(profile,
-                        subject: 'My CardLink Pro profile');
+                    await ShareService.shareText(
+                      profile,
+                      subject: 'My M Share profile',
+                    );
                   },
                 ),
                 const SizedBox(width: 16),
                 _ActionTile(
                   icon: Icons.email_rounded,
-                  label: 'Email My CardLink Pro Profile',
+                  label: 'Email My M Share Profile',
                   decoration: tileDecoration,
                   onTap: () async {
-                    final pdf =
-                        await PdfService.buildProfilePdf(profile: profile);
+                    final pdf = await PdfService.buildProfilePdf(
+                      profile: profile,
+                    );
                     final xfile = await ShareService.xfileFromBytes(
                       await pdf.readAsBytes(),
-                      'cardlink.pdf',
+                      'mshare-profile.pdf',
                       'application/pdf',
                     );
                     await ShareService.shareEmailWithAttachments(
-                      subject: 'My CardLink Pro Profile',
+                      subject: 'My M Share Profile',
                       body: ShareService.renderShareText(profile),
                       files: [xfile],
                     );
@@ -125,7 +127,7 @@ class QrShareSheet extends StatelessWidget {
 class _ActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final Future<void> Function() onTap;
   final Decoration decoration;
   const _ActionTile({
     required this.icon,
@@ -138,7 +140,7 @@ class _ActionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        onTap: onTap,
+        onTap: () async => await onTap(),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           height: 120,
@@ -152,10 +154,9 @@ class _ActionTile extends StatelessWidget {
               Text(
                 label,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
           ),

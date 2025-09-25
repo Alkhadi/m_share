@@ -1,31 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>M Share • Send/Receive Money</title>
-<meta name="description" content="Copy details, then open your banking app.">
-<style>
-:root{ --bg:#0f172a; --card:#0b1220; --b:#1f2937; --fg:#e5e7eb; --muted:#94a3b8; }
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Inter,Segoe UI,Roboto,Arial}
-.wrap{max-width:980px;margin:auto;padding:24px}
-.card{background:var(--card);border:1px solid var(--b);border-radius:22px;padding:20px}
-h1{margin:0 0 10px;font-size:1.6rem}
-.muted{color:var(--muted)}
-.grid{display:grid;gap:12px;margin-top:12px}
-@media(min-width:760px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.kv{padding:12px;border:1px solid var(--b);border-radius:12px;background:#0a1020}
-.btn{cursor:pointer;display:inline-block;margin:10px 8px 0 0;padding:12px 14px;border-radius:12px;border:1px solid var(--b);background:#0a1020;color:#e5e7eb;text-decoration:none}
-.ok{color:#86efac}.err{color:#fca5a5}
-.apps{display:flex;flex-wrap:wrap}
-</style>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>M Share • Send/Receive Money</title>
+  <meta name="description" content="Copy details, then open your banking app.">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="wrap">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html"><span class="logo">M</span> M Share</a>
+    <nav class="main-nav" id="mainNav">
+      <a data-href="index.html">Profile</a>
+      <a data-href="bank.html">Money</a>
+      <a data-href="wellbeing.html">Wellbeing</a>
+      <a data-href="pdf.html">PDF</a>
+      <button id="shareOpen" class="btn" type="button"><span class="icon">🔗</span> Share</button>
+    </nav>
+    <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main class="container">
   <div class="card">
     <h1>Send money to <span id="name">Alkhadi</span>?</h1>
     <div class="muted">Tap <b>Copy details</b> then choose your bank app.</div>
 
-    <div class="grid">
+    <div class="kv-grid" style="margin-top: 12px;">
       <div class="kv"><div class="muted">Account name</div><div id="accName" style="font-weight:600">Alkhadi Koroma</div></div>
       <div class="kv"><div class="muted">Reference</div><div id="ref" style="font-weight:600">M SHARE</div></div>
       <div class="kv"><div class="muted">Account number</div><div id="acc" style="font-weight:600">—</div></div>
@@ -40,67 +41,112 @@ h1{margin:0 0 10px;font-size:1.6rem}
 
     <div class="muted" style="margin-top:10px">Open your bank app:</div>
     <div class="apps">
-      <a class="btn" data-scheme="monzo://" data-name="Monzo">Monzo</a>
-      <a class="btn" data-scheme="starling://" data-name="Starling">Starling</a>
-      <a class="btn" data-scheme="revolut://" data-name="Revolut">Revolut</a>
-      <a class="btn" data-scheme="barclaysmobilebanking://" data-name="Barclays">Barclays</a>
-      <a class="btn" data-scheme="natwest://" data-name="NatWest">NatWest</a>
-      <a class="btn" data-scheme="hsbcukmobilebanking://" data-name="HSBC UK">HSBC UK</a>
-      <a class="btn" data-scheme="santanderuk://" data-name="Santander">Santander</a>
-      <a class="btn" data-scheme="lloydsbank://" data-name="Lloyds">Lloyds</a>
-      <a class="btn" data-scheme="halifax://" data-name="Halifax">Halifax</a>
-      <a class="btn" data-scheme="tsb://" data-name="TSB">TSB</a>
+      <a class="app-btn" data-scheme="monzo://"    data-name="Monzo">Monzo</a>
+      <a class="app-btn" data-scheme="starling://"  data-name="Starling">Starling</a>
+      <a class="app-btn" data-scheme="revolut://"   data-name="Revolut">Revolut</a>
+      <a class="app-btn" data-scheme="barclaysmobilebanking://" data-name="Barclays">Barclays</a>
+      <a class="app-btn" data-scheme="natwest://"   data-name="NatWest">NatWest</a>
+      <a class="app-btn" data-scheme="hsbcukmobilebanking://" data-name="HSBC UK">HSBC UK</a>
+      <a class="app-btn" data-scheme="santanderuk://" data-name="Santander">Santander</a>
+      <a class="app-btn" data-scheme="lloydsbank://" data-name="Lloyds">Lloyds</a>
+      <a class="app-btn" data-scheme="halifax://"   data-name="Halifax">Halifax</a>
+      <a class="app-btn" data-scheme="tsb://"       data-name="TSB">TSB</a>
     </div>
 
-    <div style="margin-top:16px">
+    <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap">
       <a id="back" class="btn">← Back to profile</a>
+      <button id="shareOpen2" class="btn">🔗 Share</button>
+    </div>
+  </div>
+</main>
+
+<!-- Share sheet -->
+<div id="shareSheet" class="sheet hidden">
+  <div id="shareBackdrop" class="sheet" style="position:absolute; inset:0;"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="sheet-head">
+      <h2 id="shareTitle" class="sheet-title">Share profile</h2>
+      <button id="shareClose" class="sheet-close" aria-label="Close">×</button>
+    </div>
+    <textarea id="shareText" class="share-text" readonly></textarea>
+    <div class="share-actions">
+      <button class="btn" id="copyShare">📋 Copy</button>
+      <button class="btn" id="shareNative">🔗 Share…</button>
+      <button class="btn" id="savePng">🖼️ Save PNG</button>
+      <button class="btn" id="sharePng">📤 Share PNG</button>
+      <button class="btn" id="shareWA">🟢 WhatsApp</button>
+      <button class="btn" id="shareSMS">💬 SMS</button>
+      <button class="btn" id="shareMAIL">✉️ Email</button>
     </div>
   </div>
 </div>
+
+<script src="app.js"></script>
 <script>
-const p = new URLSearchParams(location.search);
-const get=(k,d='')=>p.get(k)??d;
-const name = get('name','Alkhadi Koroma'), acc=get('acc',''), sort=get('sort',''), iban=get('iban',''), ref=get('ref','M SHARE');
-accName.textContent=name; document.getElementById('name').textContent=name;
-document.getElementById('acc').textContent  = acc || '—';
-document.getElementById('sort').textContent = sort || '—';
-document.getElementById('iban').textContent = iban || '—';
-document.getElementById('ref').textContent  = ref || '—';
-back.href = 'index.html'+(location.search||'');
+  const { data, qp } = window.__MSHARE__;
+  // Back link preserves current query
+  document.getElementById('back').href = 'index.html' + (qp || '');
 
-const details=`Payee: ${name}
-Account: ${acc}
-Sort code: ${sort}
-IBAN: ${iban}
-Reference: ${ref}`;
+  const name = data.name;
+  const accVal = data.acc || '';
+  const sortVal = data.sort || '';
+  const ibanVal = data.iban || '';
+  const refVal = data.ref || 'M SHARE';
 
-copyBtn.addEventListener('click', async ()=>{
-  try{ await navigator.clipboard.writeText(details); copied.textContent='Copied. Now open your bank app below.'; copied.className='ok'; }
-  catch{ copied.textContent='Copy failed. Long-press to copy:'; copied.className='err'; const pre=document.createElement('pre'); pre.textContent=details; copyBtn.insertAdjacentElement('afterend',pre); }
-});
+  accName.textContent = name;
+  document.getElementById('name').textContent = name;
+  document.getElementById('acc').textContent  = accVal || '—';
+  document.getElementById('sort').textContent = sortVal || '—';
+  document.getElementById('iban').textContent = ibanVal || '—';
+  document.getElementById('ref').textContent  = refVal || '—';
 
-function isAndroid(){ return /Android/i.test(navigator.userAgent); }
-function isIOS(){ return /iPhone|iPad|iPod/i.test(navigator.userAgent); }
+  const details = `Payee: ${name}
+Account: ${accVal}
+Sort code: ${sortVal}
+IBAN: ${ibanVal}
+Reference: ${refVal}`;
 
-function openApp(scheme, label){
-  const t=Date.now();
-  location.href=scheme;
-  setTimeout(()=>{
-    if(Date.now()-t<1600){
-      const q=encodeURIComponent(label+' bank');
-      location.href=isAndroid()
-        ? 'https://play.google.com/store/search?q='+q+'&c=apps'
-        : 'https://apps.apple.com/gb/search?term='+q;
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(details);
+      copied.textContent = 'Copied. Now open your bank app below.';
+      copied.className = 'ok';
+    } catch {
+      copied.textContent = 'Copy failed. Long-press to copy:';
+      copied.className = 'err';
+      const pre = document.createElement('pre');
+      pre.textContent = details;
+      copyBtn.insertAdjacentElement('afterend', pre);
     }
-  },1000);
-}
-
-document.querySelectorAll('.apps .btn').forEach(b=>{
-  b.addEventListener('click',()=>{
-    navigator.clipboard.writeText(details).catch(()=>{});
-    openApp(b.dataset.scheme,b.dataset.name);
   });
-});
+
+  function isAndroid() { return /Android/i.test(navigator.userAgent); }
+  function isIOS()     { return /iPhone|iPad|iPod/i.test(navigator.userAgent); }
+
+  function openApp(scheme, label) {
+    const t = Date.now();
+    location.href = scheme;
+    setTimeout(() => {
+      if (Date.now() - t < 1600) {
+        const q = encodeURIComponent(label + ' bank');
+        location.href = isAndroid()
+          ? 'https://play.google.com/store/search?q=' + q + '&c=apps'
+          : 'https://apps.apple.com/gb/search?term=' + q;
+      }
+    }, 1000);
+  }
+
+  document.querySelectorAll('.apps .app-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      navigator.clipboard.writeText(details).catch(() => {});
+      openApp(b.dataset.scheme, b.dataset.name);
+    });
+  });
+
+  // Share button on page
+  document.getElementById('shareOpen2').addEventListener('click', () => {
+    document.getElementById('shareOpen').click();
+  });
 </script>
 </body>
 </html>

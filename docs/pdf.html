@@ -1,33 +1,74 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>M Share • Profile PDF</title>
-<meta name="description" content="Download Alkhadi’s profile PDF with active links.">
-<style>
-:root{ --bg:#0f172a; --card:#0b1220; --b:#1f2937; --fg:#e5e7eb; --muted:#94a3b8 }
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Inter,Segoe UI,Roboto,Arial}
-.wrap{max-width:980px;margin:auto;padding:24px}
-.card{background:var(--card);border:1px solid var(--b);border-radius:22px;padding:20px}
-a{color:#38bdf8}
-</style>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>M Share • Profile PDF</title>
+  <meta name="description" content="Download Alkhadi’s profile PDF with active links.">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="wrap">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html"><span class="logo">M</span> M Share</a>
+    <nav class="main-nav" id="mainNav">
+      <a data-href="index.html">Profile</a>
+      <a data-href="bank.html">Money</a>
+      <a data-href="wellbeing.html">Wellbeing</a>
+      <a data-href="pdf.html">PDF</a>
+      <button id="shareOpen" class="btn" type="button"><span class="icon">🔗</span> Share</button>
+    </nav>
+    <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main class="container">
   <div class="card">
     <h1>Download Profile PDF</h1>
-    <p>This PDF contains tappable links for phone, email, website, address (Maps), and banking.</p>
-    <p><a id="pdfLink" download="m_share_profile.pdf">⬇ Download PDF</a></p>
+    <p>This PDF contains tappable links for phone, email, website, maps, and banking.</p>
+    <p id="status"><a id="pdfLink" class="btn btn-primary" download="m_share_profile.pdf">⬇ Download PDF</a></p>
     <p class="muted">If your browser opens it in a tab, use the download button there.</p>
-    <p><a id="back">← Back to Profile</a></p>
+    <div class="actions" style="margin-top:14px">
+      <a id="back" class="btn">← Back to Profile</a>
+    </div>
+  </div>
+</main>
+
+<!-- Share sheet -->
+<div id="shareSheet" class="sheet hidden">
+  <div id="shareBackdrop" class="sheet" style="position:absolute; inset:0;"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="sheet-head">
+      <h2 id="shareTitle" class="sheet-title">Share profile</h2>
+      <button id="shareClose" class="sheet-close" aria-label="Close">×</button>
+    </div>
+    <textarea id="shareText" class="share-text" readonly></textarea>
+    <div class="share-actions">
+      <button class="btn" id="copyShare">📋 Copy</button>
+      <button class="btn" id="shareNative">🔗 Share…</button>
+      <button class="btn" id="savePng">🖼️ Save PNG</button>
+      <button class="btn" id="sharePng">📤 Share PNG</button>
+      <button class="btn" id="shareWA">🟢 WhatsApp</button>
+      <button class="btn" id="shareSMS">💬 SMS</button>
+      <button class="btn" id="shareMAIL">✉️ Email</button>
+    </div>
   </div>
 </div>
+
+<script src="app.js"></script>
 <script>
-const qp = location.search || '';
-// TODO: host the latest generated PDF and drop its URL here:
-const hostedPdfUrl = 'https://alkhadi.github.io/m_share/assets/m_share_profile.pdf';
-document.getElementById('pdfLink').href = hostedPdfUrl;
-document.getElementById('back').href = 'index.html'+qp;
+  const { qp } = window.__MSHARE__;
+  const link = document.getElementById('pdfLink');
+  link.href = 'assets/m_share_profile.pdf'; // expected path
+
+  // check availability quickly
+  fetch(link.href, { method: 'HEAD' }).then(r => {
+    if (!r.ok) throw new Error('missing');
+  }).catch(() => {
+    document.getElementById('status').innerHTML =
+      '⚠️ PDF not uploaded yet. Place your file at <code>/assets/m_share_profile.pdf</code> then refresh.';
+  });
+
+  document.getElementById('back').href = 'index.html' + (qp || '');
 </script>
 </body>
 </html>

@@ -12,8 +12,10 @@ class TextShareSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Compose the shareable text once.
     final text = ShareService.renderShareText(profile);
     final scheme = Theme.of(context).colorScheme;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -21,13 +23,15 @@ class TextShareSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Share as Text',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Share as Text',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: scheme.surfaceContainer,
+                color: scheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Theme.of(context).dividerColor),
               ),
@@ -61,11 +65,17 @@ class TextShareSheet extends StatelessWidget {
                   child: FilledButton.icon(
                     icon: const Icon(Icons.share_rounded),
                     label: const Text('Share'),
-                    onPressed: () => ShareService.shareText(profile),
+                    onPressed: () async {
+                      // Call the static ShareService method to share as text.
+                      await ShareService.shareText(
+                        profile,
+                        subject: 'My M Share profile',
+                      );
+                    },
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

@@ -1,75 +1,60 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M Share • Profile</title>
-<meta name="description" content="Alkhadi Koroma — dynamic profile card with active links, banking, wellbeing.">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0f172a">
-<meta property="og:title" content="M Share — Profile">
-<meta property="og:description" content="Tap to call, email, navigate, or send money to Alkhadi.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="">
-<meta name="color-scheme" content="dark light">
-<style>
-:root{ --bg:#0f172a; --card:#0b1220; --b:#1f2937; --fg:#e5e7eb; --muted:#94a3b8; --accent:#38bdf8; --accent2:#22c55e; }
-*{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Inter,Segoe UI,Roboto,Arial}
-a{color:var(--accent);text-decoration:none} a.btn{color:var(--fg)}
-.wrap{max-width:980px;margin:auto;padding:24px}
-.card{background:var(--card);border:1px solid var(--b);border-radius:22px;padding:18px 18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.top{display:grid;gap:16px;align-items:center}
-@media(min-width:760px){ .top{grid-template-columns:160px 1fr} }
-.avatar{width:160px;height:160px;border-radius:22px;object-fit:cover;border:2px solid var(--b);background:#0a1020}
-h1{margin:.2rem 0 0;font-size:1.6rem}
-.muted{color:var(--muted)}
-.row{display:grid;gap:10px;margin-top:14px}
-@media(min-width:760px){ .row{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.tile{border:1px solid var(--b);border-radius:14px;padding:12px 14px;background:#0a1020}
-.tile label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:4px}
-.tile .val{font-weight:600;word-break:break-word}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--b);background:#0a1020;padding:12px 14px;border-radius:12px}
-.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#0a1020;border:1px solid var(--b);margin-right:6px}
-.footer{margin-top:16px;font-size:.9rem}
-hr.sep{border:none;border-top:1px dashed var(--b);margin:18px 0}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>M Share • Profile</title>
+  <meta name="description" content="Alkhadi Koroma — dynamic profile card with active links, banking, wellbeing.">
+  <meta name="color-scheme" content="dark light">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="wrap">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" id="brandLink" href="index.html"><span class="logo">M</span> M Share</a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a data-href="index.html">Profile</a>
+      <a data-href="bank.html">Money</a>
+      <a data-href="wellbeing.html">Wellbeing</a>
+      <a data-href="pdf.html">PDF</a>
+      <button id="shareOpen" class="btn" type="button" title="Share"><span class="icon">🔗</span> Share</button>
+    </nav>
+    <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main class="container">
   <div class="card">
-    <div class="top">
+    <div class="profile-top">
       <img id="avatar" class="avatar" alt="Avatar">
       <div>
         <h1 id="name">Alkhadi Koroma</h1>
         <div class="muted" id="title">M Share • Digital Profile</div>
         <div class="actions">
-          <a class="btn" id="toPdf">⬇️ Download Profile (PDF)</a>
-          <a class="btn" id="toBank">💷 Send/Receive Money</a>
+          <a class="btn btn-primary" id="toPdf">⬇️ Download Profile (PDF)</a>
+          <a class="btn btn-success" id="toBank">💷 Send/Receive Money</a>
           <a class="btn" id="toWellbeing">💡 Wellbeing</a>
+          <button class="btn" id="shareOpen2" type="button">🔗 Share</button>
         </div>
       </div>
     </div>
 
-    <!-- “Wellbeing” section EXACT layout feel like AC number tile, placed ABOVE AC number -->
     <hr class="sep">
-    <div class="row">
-      <div class="tile" style="grid-column:1/-1">
-        <label>Wellbeing</label>
-        <div class="val">
-          <span class="badge">1-min reset: 4-4-8 breathing ×4</span>
-          <span class="badge">5–10 min walk after long sits</span>
-          <span class="badge">Pomodoro 25/5</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="row" id="contactGrid">
-      <div class="tile"><label>Phone</label><div class="val"><a id="phoneA" href="#">—</a></div></div>
+    <!-- Editable Wellbeing link tile (exact look/feel of bank tiles) placed ABOVE AC number -->
+    <div class="grid" id="contactGrid">
+      <div class="tile"><label>Phone</label><div class="val"><a id="07713150495" href="#">—</a></div></div>
       <div class="tile"><label>Email</label><div class="val"><a id="emailA" href="#">—</a></div></div>
       <div class="tile"><label>Website</label><div class="val"><a id="siteA" href="#">—</a></div></div>
       <div class="tile"><label>Address</label><div class="val" id="addr">—</div></div>
+
+      <!-- New Wellbeing link tile -->
+      <div class="tile" style="grid-column: 1/-1;">
+        <label>Wellbeing link</label>
+        <div class="val"><a id="wbA" target="_blank" rel="noopener">—</a></div>
+      </div>
+
       <div class="tile"><label>AC Number</label><div class="val" id="acc">—</div></div>
       <div class="tile"><label>Sort code</label><div class="val" id="sort">—</div></div>
       <div class="tile"><label>IBAN</label><div class="val" id="iban">—</div></div>
@@ -77,71 +62,47 @@ hr.sep{border:none;border-top:1px dashed var(--b);margin:18px 0}
     </div>
 
     <div style="margin-top:12px">
-      <span class="badge"><a id="xA"  target="_blank">X</a></span>
-      <span class="badge"><a id="igA" target="_blank">Instagram</a></span>
-      <span class="badge"><a id="ytA" target="_blank">YouTube</a></span>
-      <span class="badge"><a id="lnA" target="_blank">LinkedIn</a></span>
+      <span class="badge"><a id="xA"  target="_blank" rel="noopener">X</a></span>
+      <span class="badge"><a id="igA" target="_blank" rel="noopener">Instagram</a></span>
+      <span class="badge"><a id="ytA" target="_blank" rel="noopener">YouTube</a></span>
+      <span class="badge"><a id="lnA" target="_blank" rel="noopener">LinkedIn</a></span>
     </div>
   </div>
 
-  <div class="footer muted">Tip: All values can be passed via URL params (?name=...&phone=... etc). Installable PWA.</div>
+  <div class="footer muted">Tip: All values can be passed via URL params (?n=...&ph=... etc). Installable PWA.</div>
+</main>
+
+<!-- Share sheet (bottom) -->
+<div id="shareSheet" class="sheet hidden">
+  <div id="shareBackdrop" class="sheet" style="position:absolute; inset:0;"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="sheet-head">
+      <h2 id="shareTitle" class="sheet-title">Share profile</h2>
+      <button id="shareClose" class="sheet-close" aria-label="Close">×</button>
+    </div>
+    <textarea id="shareText" class="share-text" readonly></textarea>
+    <div class="share-actions">
+      <button class="btn" id="copyShare">📋 Copy</button>
+      <button class="btn" id="shareNative">🔗 Share…</button>
+      <button class="btn" id="savePng">🖼️ Save PNG</button>
+      <button class="btn" id="sharePng">📤 Share PNG</button>
+      <button class="btn" id="shareWA">🟢 WhatsApp</button>
+      <button class="btn" id="shareSMS">💬 SMS</button>
+      <button class="btn" id="shareMAIL">✉️ Email</button>
+    </div>
+  </div>
 </div>
+
+<script src="app.js"></script>
 <script>
-(async function(){
-  if('serviceWorker' in navigator){ try{ await navigator.serviceWorker.register('sw.js'); }catch{} }
-  const p = new URLSearchParams(location.search);
-  const get = (k,d='') => p.get(k) ?? d;
-
-  const data = {
-    name:get('name','Alkhadi Koroma'),
-    title:get('title','M Share • Digital Profile'),
-    phone:get('phone',''),
-    email:get('email',''),
-    site:get('site',''),
-    addr:get('addr',''),
-    avatar:get('avatar','https://picsum.photos/400?random=7'),
-    acc:get('acc',''), sort:get('sort',''), iban:get('iban',''), ref:get('ref','M SHARE'),
-    x:get('x',''), ig:get('ig',''), yt:get('yt',''), ln:get('ln','')
-  };
-
-  document.getElementById('avatar').src = data.avatar;
-  document.getElementById('name').textContent = data.name;
-  document.getElementById('title').textContent = data.title;
-
-  if(data.phone){ const a=phoneA; a.href='tel:'+data.phone; a.textContent=data.phone; }
-  if(data.email){ const a=emailA; a.href='mailto:'+data.email; a.textContent=data.email; }
-  if(data.site){  const a=siteA; a.href=data.site; a.textContent=data.site; }
-  if(data.addr){  addr.innerHTML = '<a target="_blank" href="https://maps.google.com/?q='+encodeURIComponent(data.addr)+'">'+data.addr+'</a>'; }
-
-  acc.textContent  = data.acc || '—';
-  sort.textContent = data.sort || '—';
-  iban.textContent = data.iban || '—';
-  ref.textContent  = data.ref || '—';
-
-  if(data.x)  xA.href  = data.x;
-  if(data.ig) igA.href = data.ig;
-  if(data.yt) ytA.href = data.yt;
-  if(data.ln) lnA.href = data.ln;
-
-  const qp = location.search || ('?name='+encodeURIComponent(data.name)
-    +'&phone='+encodeURIComponent(data.phone)
-    +'&email='+encodeURIComponent(data.email)
-    +'&site='+encodeURIComponent(data.site)
-    +'&addr='+encodeURIComponent(data.addr)
-    +'&avatar='+encodeURIComponent(data.avatar)
-    +'&acc='+encodeURIComponent(data.acc)
-    +'&sort='+encodeURIComponent(data.sort)
-    +'&iban='+encodeURIComponent(data.iban)
-    +'&ref='+encodeURIComponent(data.ref)
-    +'&x='+encodeURIComponent(data.x)
-    +'&ig='+encodeURIComponent(data.ig)
-    +'&yt='+encodeURIComponent(data.yt)
-    +'&ln='+encodeURIComponent(data.ln));
-
-  toPdf.href       = 'pdf.html'+qp;
-  toBank.href      = 'bank.html'+qp;
-  toWellbeing.href = 'wellbeing.html'+qp;
-})();
+  // allow both header Share buttons to open sheet
+  document.getElementById('shareOpen2').addEventListener('click', () => {
+    document.getElementById('shareOpen').click();
+  });
+  // Register service worker (optional; ignore errors)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 </script>
 </body>
 </html>

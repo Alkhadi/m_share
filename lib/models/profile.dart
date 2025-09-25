@@ -60,31 +60,31 @@ class Profile {
   });
 
   Map<String, dynamic> toMap() => {
-        'fullName': fullName,
-        'role': role,
-        'address': address,
-        'phone': phone,
-        'email': email,
-        'website': website,
-        'wellbeingLink': wellbeingLink,
-        'bankSortCode': bankSortCode,
-        'bankAccountNumber': bankAccountNumber,
-        'avatarPath': avatarPath,
-        'backgroundPath': backgroundPath,
-        // Use toARGB32() instead of the deprecated .value
-        'backgroundColor': backgroundColor?.toARGB32(),
-        'linkedin': linkedin,
-        'instagram': instagram,
-        'facebook': facebook,
-        'xHandle': xHandle,
-        'youtube': youtube,
-        'tiktok': tiktok,
-        'snapchat': snapchat,
-        // legacy
-        'twitter': twitter,
-        'pinterest': pinterest,
-        'whatsapp': whatsapp,
-      };
+    'fullName': fullName,
+    'role': role,
+    'address': address,
+    'phone': phone,
+    'email': email,
+    'website': website,
+    'wellbeingLink': wellbeingLink,
+    'bankSortCode': bankSortCode,
+    'bankAccountNumber': bankAccountNumber,
+    'avatarPath': avatarPath,
+    'backgroundPath': backgroundPath,
+    // Use toARGB32() instead of the deprecated .value
+    'backgroundColor': backgroundColor?.toARGB32(),
+    'linkedin': linkedin,
+    'instagram': instagram,
+    'facebook': facebook,
+    'xHandle': xHandle,
+    'youtube': youtube,
+    'tiktok': tiktok,
+    'snapchat': snapchat,
+    // legacy
+    'twitter': twitter,
+    'pinterest': pinterest,
+    'whatsapp': whatsapp,
+  };
 
   factory Profile.fromMap(Map<String, dynamic> map) {
     Color? color;
@@ -129,17 +129,17 @@ class Profile {
 
   // ---- Convenience + Legacy compatibility getters ----
   static Profile defaultProfile() => Profile(
-        fullName: 'Alkhadi Koroma',
-        role: 'Professional Title · Flutter Developer',
-        address: 'Flat 72 Priory Court, 1 Cheltenham Road, London SE15 3BG',
-        phone: '07736806367',
-        email: 'ngummariato@gmail.com',
-        website: 'https://www.google.com',
-        wellbeingLink: 'https://wellbeing.example.com',
-        bankSortCode: '09-01-35',
-        bankAccountNumber: '93087283',
-        backgroundColor: Colors.grey.shade200,
-      );
+    fullName: 'Alkhadi Koroma',
+    role: 'Professional Title · Flutter Developer',
+    address: 'Flat 72 Priory Court, 1 Cheltenham Road, London SE15 3BG',
+    phone: '07736806367',
+    email: 'ngummariato@gmail.com',
+    website: 'https://www.google.com',
+    wellbeingLink: 'https://mindpaylink.com/',
+    bankSortCode: '09-01-35',
+    bankAccountNumber: '93087283',
+    backgroundColor: Colors.grey.shade200,
+  );
 
   static Profile fromJsonString(String s) => Profile.fromJson(s);
 

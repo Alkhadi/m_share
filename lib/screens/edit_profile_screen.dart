@@ -11,9 +11,8 @@ import '../models/profile.dart';
 import '../services/contact_service.dart';
 import '../services/share_service.dart';
 
-/// Edit form for Profile with avatar/background pickers, add contact
-/// integration and the ability to share a captured profile card or a
-/// custom image to multiple recipients.
+/// Edit form for Profile with avatar/background pickers,
+/// plus ability to share a captured profile image or a custom image.
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key, required this.profile});
   final Profile profile;
@@ -308,8 +307,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<Uint8List?> _capturePreview() async {
     try {
-      final boundary = _previewKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary =
+          _previewKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
       if (boundary == null) return null;
       final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -365,13 +365,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             _editable.backgroundColor ?? Colors.grey.shade200,
                         image: _editable.backgroundPath != null
                             ? DecorationImage(
-                                image: _editable.backgroundPath!
-                                        .startsWith('assets/')
+                                image:
+                                    _editable.backgroundPath!.startsWith(
+                                      'assets/',
+                                    )
                                     ? AssetImage(_editable.backgroundPath!)
-                                        as ImageProvider<Object>
-                                    : FileImage(
-                                        File(_editable.backgroundPath!),
-                                      ) as ImageProvider<Object>,
+                                          as ImageProvider<Object>
+                                    : FileImage(File(_editable.backgroundPath!))
+                                          as ImageProvider<Object>,
                                 fit: BoxFit.cover,
                               )
                             : null,
@@ -382,10 +383,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           radius: 40,
                           backgroundImage: _editable.avatarPath != null
                               ? (_editable.avatarPath!.startsWith('assets/')
-                                  ? AssetImage(_editable.avatarPath!)
-                                      as ImageProvider<Object>
-                                  : FileImage(File(_editable.avatarPath!))
-                                      as ImageProvider<Object>)
+                                    ? AssetImage(_editable.avatarPath!)
+                                          as ImageProvider<Object>
+                                    : FileImage(File(_editable.avatarPath!))
+                                          as ImageProvider<Object>)
                               : null,
                           child: _editable.avatarPath == null
                               ? Text(
