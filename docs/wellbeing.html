@@ -1,63 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>M Share • Wellbeing</title>
-  <meta name="description" content="Reset breathing, micro-moves, and focus tips.">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Wellbeing • M Share</title>
+  <meta name="description" content="Measured Breathing. Measurable Relief. Free, evidence-based breathing techniques.">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="site-header">
-  <div class="container navbar">
-    <a class="brand" href="index.html"><span class="logo">M</span> M Share</a>
-    <nav class="main-nav" id="mainNav">
-      <a data-href="index.html">Profile</a>
-      <a data-href="bank.html">Money</a>
-      <a data-href="wellbeing.html">Wellbeing</a>
-      <a data-href="pdf.html">PDF</a>
-      <button id="shareOpen" class="btn" type="button"><span class="icon">🔗</span> Share</button>
-    </nav>
-    <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
-  </div>
-</header>
+  <header class="site-header">
+    <div class="container navbar">
+      <a id="brandLink" class="brand"><span class="logo">M</span> M Share</a>
+      <nav class="main-nav" id="mainNav">
+        <a data-href="wellbeing.html" aria-current="page">Wellbeing</a>
+        <a data-href="bank.html">Buy me coffee</a>
+        <button id="shareOpen" class="btn" type="button">🔗 Share</button>
+      </nav>
+      <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </header>
 
-<main class="container">
-  <div class="card">
-    <h1>Wellbeing</h1>
-    <div class="tile"><strong>Reset:</strong> inhale 4s • hold 4s • exhale 6–8s ×4</div>
-    <div class="tile"><strong>Move:</strong> 5–10 min brisk walk after long sits.</div>
-    <div class="tile"><strong>Focus:</strong> 25/5 Pomodoro; silence alerts.</div>
-    <div class="actions">
-      <a id="back" class="btn">← Back</a>
+  <main class="container">
+    <div class="card">
+      <h1>Measured Breathing. Measurable Relief.</h1>
+      <p class="muted">Free, evidence-based breathing & mindfulness techniques designed to reduce stress and anxiety in minutes.</p>
+      <div class="actions">
+        <a class="btn btn-success" href="box-breathing.html">🟩 Box Breathing</a>
+        <a class="btn btn-success" href="4-7-8-breathing.html">🟦 4-7-8 Breathing</a>
+        <a class="btn btn-success" href="coherent-5-5.html">🟪 Coherent 5-5</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Progress</h2>
+      <div class="badge">Total Minutes: <span id="mTotal">0</span></div>
+      <div class="badge">Streak: <span id="mStreak">0</span> days</div>
+      <div class="badge">Sessions: <span id="mSessions">0</span></div>
+      <div class="badge">Breaths: <span id="mBreaths">0</span></div>
+
+      <div class="canvas-wrap" style="margin-top:10px">
+        <canvas id="weeklyChart"></canvas>
+      </div>
+
+      <!-- NEW -->
+      <div id="todayLine" class="muted" style="margin-top:6px"></div>
+    </div>
+  </main>
+
+  <footer class="footer">© <span id="year"></span> Pure Care Plus.co.uk Ltd — Educational only, not medical advice.</footer>
+
+  <!-- Share sheet -->
+  <div id="shareSheet" class="sheet hidden">
+    <div id="shareBackdrop" style="position:absolute; inset:0;"></div>
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <h2 id="shareTitle" class="sheet-title">Share site</h2>
+        <button id="shareClose" class="sheet-close">×</button>
+      </div>
+      <textarea id="shareText" class="share-text" readonly></textarea>
+      <div class="share-actions">
+        <button class="btn" id="copyShare">📋 Copy</button>
+        <button class="btn" id="shareNative">🔗 Share…</button>
+      </div>
     </div>
   </div>
-</main>
 
-<!-- Share sheet -->
-<div id="shareSheet" class="sheet hidden">
-  <div id="shareBackdrop" class="sheet" style="position:absolute; inset:0;"></div>
-  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
-    <div class="sheet-head">
-      <h2 id="shareTitle" class="sheet-title">Share profile</h2>
-      <button id="shareClose" class="sheet-close" aria-label="Close">×</button>
-    </div>
-    <textarea id="shareText" class="share-text" readonly></textarea>
-    <div class="share-actions">
-      <button class="btn" id="copyShare">📋 Copy</button>
-      <button class="btn" id="shareNative">🔗 Share…</button>
-      <button class="btn" id="savePng">🖼️ Save PNG</button>
-      <button class="btn" id="sharePng">📤 Share PNG</button>
-      <button class="btn" id="shareWA">🟢 WhatsApp</button>
-      <button class="btn" id="shareSMS">💬 SMS</button>
-      <button class="btn" id="shareMAIL">✉️ Email</button>
-    </div>
-  </div>
-</div>
-
-<script src="app.js"></script>
-<script>
-  const { qp } = window.__MSHARE__;
-  document.getElementById('back').href = 'index.html' + (qp || '');
-</script>
+  <script src="app.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
